@@ -1,0 +1,11 @@
+.form-submit__question {
+	margin: 34px 36px 38px;
+	max-width: 358px;
+}
+
+@media screen and (max-width: 500px) {
+	.form-submit__question {
+		margin: 34px 20px 38px;
+		max-width: 240px;
+	}
+}

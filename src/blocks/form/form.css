@@ -1,0 +1,30 @@
+@import url(./__container/form__container.css);
+@import url(./__handlers/form__handlers.css);
+@import url(./__heading/form__heading.css);
+@import url(./__input-container/form__input-container.css);
+@import url(./__item/form__item.css);
+@import url(././__item/_name/form__item_name.css);
+@import url(././__item/_about/form__item_about.css);
+@import url(./__title/form__title.css);
+@import url(././__item/_title/form__item_title.css);
+@import url(././__item/_link/form__item_link.css);
+@import url(././__field/form__field.css);
+@import url(././__field-info/__field-info.css);
+
+
+.form {
+  min-height: 181px;
+  width: 430px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+
+@media screen and (max-width: 500px) {
+  .form {
+    width: 240px;
+  }
+}

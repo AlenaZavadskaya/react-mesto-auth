@@ -1,0 +1,28 @@
+@import url(../src/vendor/normalize.css);
+@import url(../src/vendor/fonts/inter.css);
+@import url(../src/blocks/root/root.css);
+@import url(../src/blocks/page/page.css);
+@import url(../src/blocks/content/content.css);
+@import url(../src/blocks/header/header.css);
+@import url(../src/blocks/profile/profile.css);
+@import url(../src/blocks/edit-button/edit-button.css);
+@import url(../src/blocks/add-button/add-button.css);
+@import url(../src/blocks/elements/elements.css);
+@import url(../src/blocks/element/element.css);
+@import url(../src/blocks/footer/footer.css);
+@import url(../src/blocks/popup/popup.css);
+@import url(../src/blocks/form/form.css);
+@import url(../src/blocks/submit__button/submit__button.css);
+@import url(../src/blocks/popup-image/popup-image.css);
+@import url(../src/blocks/popup/_opened/popup_opened.css);
+@import url(../src/blocks/form/__item-error/form__item-error.css);
+@import url(../src/blocks/form/__item/_error/form__item_error.css);
+@import url(../src/blocks/form/__item-error/_active/form__item-error_active.css);
+@import url(../src/blocks/submit__button/_disabled/submit__button_disabled.css);
+@import url(../src/blocks/popup-submit__button/popup-submit__button.css);
+@import url(../src/blocks/form-submit/form-submit.css);
+
+
+html {
+  background-color: #000000;
+}

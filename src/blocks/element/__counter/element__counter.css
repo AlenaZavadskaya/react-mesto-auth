@@ -1,0 +1,15 @@
+.element__counter {
+	max-width: 23px;
+	height: 13px;
+	font-family: Inter;
+	font-style: Regular;
+	font-size: 13px;
+	line-height: 16px;
+	align-items: center;
+	justify-content: start;
+	color: black;
+	align-self: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}

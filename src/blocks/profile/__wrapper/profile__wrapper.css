@@ -1,0 +1,12 @@
+@media screen and (max-width: 880px) {
+  .profile__wrapper {
+    margin: 0 0 36px;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .profile__wrapper {
+    text-align: center;
+    margin: 0 auto 36px;
+  }
+}

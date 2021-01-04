@@ -1,0 +1,10 @@
+.element__name {
+  max-width: 246px;
+  min-height: 23px;
+  line-height: 29px;
+  color: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+	margin: 0 auto;
+}

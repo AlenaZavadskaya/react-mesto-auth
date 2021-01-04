@@ -1,0 +1,21 @@
+.profile__icon {
+	background: url(../../../images/Vector.png) no-repeat center center;
+    transform: translate(-50%, 0);
+    opacity: 0; 
+		visibility: hidden;
+		/* width: 26px;
+		height: 26px; */
+    transition: .55s opacity, .55s visibility;
+    top: 0;
+    left: 50%;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    position: absolute;
+} 
+
+.profile__icon:hover {
+	opacity: 1;
+	visibility: visible;
+}
+

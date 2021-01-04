@@ -1,0 +1,10 @@
+.form__item_about {
+ /* margin: 0 auto 48px;*/
+ margin: 0 auto;
+}
+
+@media screen and (max-width: 450px) {
+  .form__item_about {
+    max-width: 240px;
+  }
+}

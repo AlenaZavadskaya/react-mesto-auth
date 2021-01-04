@@ -1,0 +1,6 @@
+.submit__button_disabled {
+  background-color: white;
+  border: 1px solid #b4b4b4;
+  color: #b4b4b4;
+  cursor: default;
+}

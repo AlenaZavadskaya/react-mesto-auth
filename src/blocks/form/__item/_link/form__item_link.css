@@ -1,0 +1,11 @@
+.form__item_link {
+  width: 358px;
+  margin: 0;
+}
+
+@media screen and (max-width: 500px) {
+  .form__item_link {
+    max-width: 200px;
+    margin: 0;
+  }
+}
