@@ -1,12 +1,14 @@
 @import url(./__logo/header__logo.css);
-
+@import url(./__enter/header__enter.css);
+@import url(./__email/header__email.css);
+@import url(./__auth/header__auth.css);
 
 .header {
   max-width: 882px;
-  margin: 45px auto 36.25px;
-  border-bottom: rgba(84, 84, 84, .7);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
+  margin: 45px auto 41px;
+	border-bottom: 1px solid #545454;
+	display: flex;
+	justify-content: space-between;
 }
 
 @media screen and (max-width: 880px) {

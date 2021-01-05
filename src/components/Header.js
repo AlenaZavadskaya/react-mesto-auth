@@ -4,7 +4,11 @@ import Logo from "../images/logo.svg";
 function Header() {
   return (
     <header className="header">
-      <img className="header__logo" src={Logo} alt="логотип" />
+			<img className="header__logo" src={Logo} alt="логотип" />
+			<div className="header__enter">
+				<p className="header__email">email@mail.com</p>
+				<p className="header__auth">Выйти</p>
+			</div>
     </header>
   );
 }
