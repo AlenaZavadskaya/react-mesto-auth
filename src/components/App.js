@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -9,6 +10,9 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import PopupWithForm from "./PopupWithForm";
+import ProtectedRoute from "./ProtectedRoute";
+import Register from "./Register";
+import Login from "./Login";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
@@ -26,6 +30,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     Promise.all([api.getUserData(), api.getInitialCards()])
@@ -155,7 +160,24 @@ function App() {
   return (
     <currentUserContext.Provider value={currentUser}>
       <Header />
-      <Main
+      <Switch>
+        <ProtectedRoute
+          exact
+          path="/"
+          loggedIn={isLoggedIn}
+          component={Main}
+          onEditProfile={handleProfilePopup}
+          onEditAvatar={handleAvatarPopupOpen}
+          onAddPlace={handlePlacePopupOpen}
+          onCardClick={setSelectedCard}
+          name={currentUser.name}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDeleteRequest}
+          cards={cards}
+        />
+        {/* {isLoggedIn ? <Redirect to="/Login" /> : <Redirect to="/Register" />}
+				</ProtectedRoute> */}
+        {/* <Main
         onEditProfile={handleProfilePopup}
         onEditAvatar={handleAvatarPopupOpen}
         onAddPlace={handlePlacePopupOpen}
@@ -164,7 +186,14 @@ function App() {
         onCardLike={handleCardLike}
         onCardDelete={handleCardDeleteRequest}
         cards={cards}
-      />
+				/> */}
+        <Route path="/sign-up">
+          <Register />
+        </Route>
+        <Route path="/sign-in">
+          <Login />
+        </Route>
+      </Switch>
       <Footer />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
