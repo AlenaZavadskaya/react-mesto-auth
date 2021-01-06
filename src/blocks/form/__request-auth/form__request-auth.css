@@ -1,15 +1,15 @@
-.header__auth {
+.form__request-auth {
   font-family: Inter;
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
-  line-height: 22px;
-	color: #a9a9a9;
-	margin: 0;
+  font-size: 14px;
+  line-height: 17px;
+	color: #ffffff;
+	text-decoration: none;
 	transition: 0.3s linear;
 }
 
-.header__auth:hover {
+.form__request-auth:hover {
   opacity: 0.8;
   cursor: pointer;
 }

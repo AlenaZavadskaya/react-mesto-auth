@@ -1,0 +1,6 @@
+.popup__img {
+  width: 120px;
+  height: 120px;
+	margin: 60px auto 32px;
+	background: url(../../../images/success.svg) center no-repeat;
+}

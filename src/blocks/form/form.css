@@ -10,7 +10,12 @@
 @import url(././__item/_link/form__item_link.css);
 @import url(././__field/form__field.css);
 @import url(././__field-info/__field-info.css);
-
+@import url(././__heading/_infoTooltip/form__heading_infoTooltip.css);
+@import url(././__heading/_auth/form__heading_auth.css);
+@import url(././__container/_auth/form__container_auth.css);
+@import url(././__field-email/form__field-email.css);
+@import url(././__field-password/form__field-password.css);
+@import url(././__request-auth/form__request-auth.css);
 
 .form {
   min-height: 181px;
@@ -22,9 +27,11 @@
   margin: 0 auto;
 }
 
-
 @media screen and (max-width: 500px) {
   .form {
     width: 240px;
   }
 }
+
+
+
