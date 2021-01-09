@@ -1,38 +1,39 @@
-import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/Api";
+import * as auth from "../utils/auth";
 import currentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import InfoTooltip from "./InfoTooltip";
 import PopupWithForm from "./PopupWithForm";
 import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import Login from "./Login";
 
 function App() {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
-    false
-  );
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(
-    false
-  );
-  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(
-    false
-  );
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [cardForDelete, setCardForDelete] = React.useState();
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [cardForDelete, setCardForDelete] = useState();
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loggedIn, setloggedIn] = useState(false);
+  const [dataUser, setDataUser] = useState({});
+  const [message, setMessage] = useState("");
+	const [registerSuccess, setRegisterSuccess] = useState(false);
+	const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+	const history = useHistory();
 
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([api.getUserData(), api.getInitialCards()])
       .then((values) => {
         const [userData, initialCards] = values;
@@ -48,6 +49,105 @@ function App() {
         console.log(`Ошибка: ${err}`);
       });
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("jwt")) {
+      let jwt = localStorage.getItem("jwt");
+      if (!jwt) {
+        return console.log(`Токен не передан или передан не в том формате`);
+      }
+      auth
+        .getContent(jwt)
+        .then((res) => {
+          if (res) {
+            setloggedIn(true);
+            setDataUser({
+              email: res.data.email,
+            });
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(`Переданный токен некорректен: ${err}`);
+        });
+    }
+    if (loggedIn) {
+      history.push("/");
+    }
+	}, [history, loggedIn]);
+	
+  function handleRegister(email, password) {
+    setIsLoading(true);
+    auth
+      .register(email, password)
+      .then((res) => {
+        if (res) {
+          if (res.data) {
+            setIsLoading(false);
+            setMessage("");
+						handleRegisterSuccess(true);
+            handleInfoTooltipPopup();
+            history.push("/sign-in");
+          }
+        }
+      })
+      .catch((err) => {
+        setMessage("Ошибка при регистрации");
+				handleRegisterSuccess(false);
+        handleInfoTooltipPopup();
+        if (err === 400) {
+          return console.log(`Некорректно заполнено одно из полей : ${err}`);
+        }
+
+        console.log(`Ошибка: ${err}`);
+      });
+  }
+
+	function handleRegisterSuccess(value) {
+    setRegisterSuccess(value);
+  }
+
+  function handleLogin(email, password) {
+    setIsLoading(true);
+    auth
+      .authorize(email, password)
+      .then((data) => {
+        if (!data) {
+          setMessage("Что-то пошло не так.");
+          return false;
+        }
+        if (data) {
+          setIsLoading(false);
+          localStorage.setItem("jwt", data.token);
+          setMessage("");
+          setDataUser({
+            email: data.email,
+            password: data.password,
+          });
+          setloggedIn(true);
+          history.push("/");
+          return loggedIn;
+        }
+      })
+      .catch((err) => {
+        setMessage("Ошибка при авторизации.");
+				handleRegisterSuccess(false);
+        handleInfoTooltipPopup();
+        if (err === 401) {
+          return console.log(`Пользователь с таким email не найден: ${err}`);
+        }
+        if (err === 400) {
+          return console.log(`Не передано одно из полей: ${err}`);
+        }
+        console.log(`Ошибка: ${err}`);
+      });
+  }
+
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt");
+    setloggedIn(false);
+    history.push("/sign-in");
+  };
 
   function handleAddPlaceSubmit(card) {
     setIsLoading(true);
@@ -135,6 +235,10 @@ function App() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   }
 
+  function handleInfoTooltipPopup() {
+    setIsInfoTooltipOpen(!isInfoTooltipOpen);
+  }
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen();
     setIsAddPlacePopupOpen();
@@ -142,9 +246,10 @@ function App() {
     setIsDeleteCardPopupOpen(false);
     setCardForDelete(undefined);
     setSelectedCard({});
+    setIsInfoTooltipOpen(false);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     function handleESCclose(evt) {
       if (evt.key === "Escape") {
         closeAllPopups();
@@ -159,12 +264,12 @@ function App() {
 
   return (
     <currentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header onSignOut={handleSignOut} email={dataUser.email} />
       <Switch>
         <ProtectedRoute
           exact
           path="/"
-          loggedIn={isLoggedIn}
+          loggedIn={loggedIn}
           component={Main}
           onEditProfile={handleProfilePopup}
           onEditAvatar={handleAvatarPopupOpen}
@@ -174,27 +279,24 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDeleteRequest}
           cards={cards}
-        />
-        {/* {isLoggedIn ? <Redirect to="/Login" /> : <Redirect to="/Register" />}
-				</ProtectedRoute> */}
-        {/* <Main
-        onEditProfile={handleProfilePopup}
-        onEditAvatar={handleAvatarPopupOpen}
-        onAddPlace={handlePlacePopupOpen}
-        onCardClick={setSelectedCard}
-        name={currentUser.name}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDeleteRequest}
-        cards={cards}
-				/> */}
+        ></ProtectedRoute>
         <Route path="/sign-up">
-          <Register />
+          <Register
+            onRegister={handleRegister}
+            message={message}
+            isLoading={isLoading}
+          />
         </Route>
         <Route path="/sign-in">
-          <Login />
+          <Login
+            onLogin={handleLogin}
+            message={message}
+            loggedIn={loggedIn}
+            isLoading={isLoading}
+          />
         </Route>
+        <Footer />
       </Switch>
-      <Footer />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onUpdateUser={handleUpdateUser}
@@ -212,6 +314,11 @@ function App() {
         onUpdateAvatar={handleUpdateAvatar}
         onClose={closeAllPopups}
         isLoading={isLoading}
+      />
+      <InfoTooltip
+        isOpen={isInfoTooltipOpen}
+        onClose={closeAllPopups}
+        isSuccess={registerSuccess}
       />
       <PopupWithForm
         isOpen={isDeleteCardPopupOpen}
