@@ -1,26 +1,6 @@
 import React from "react";
 
 function InfoTooltip(props) {
-	// проверяет нажатие esc
-	if (props.isOpen) {
-		window.addEventListener('keydown', (evt) => handleEscClose(evt))
-}
-function closeReset() {
-		props.onClose()
-		window.removeEventListener('keydown', handleEscClose)
-}
-// закрывает при нажатии esc
-function handleEscClose(evt) {
-		if (evt.key === 'Escape') {
-				closeReset()
-		}
-}
-// закрывает попап при нажатии на фон
-function closePopupByClickingOverlay(event) {
-		if (event.target === event.currentTarget) {
-				closeReset()
-		}
-}
   return (
     <section
       className={`popup ${props.isOpen ? "popup_opened" : ""}`}
