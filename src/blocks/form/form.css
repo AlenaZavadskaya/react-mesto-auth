@@ -8,6 +8,7 @@
 @import url(./__title/form__title.css);
 @import url(././__item/_title/form__item_title.css);
 @import url(././__item/_link/form__item_link.css);
+@import url(././__item/_auth/form__item_auth.css);
 @import url(././__field/form__field.css);
 @import url(././__field-info/__field-info.css);
 @import url(././__heading/_infoTooltip/form__heading_infoTooltip.css);

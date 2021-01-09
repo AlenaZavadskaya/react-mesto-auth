@@ -14,13 +14,11 @@
 }
 
 .form__item:focus {
-  outline-color: royalblue;
+	background: black;
+	outline: none;
 }
 
-.form__item_auth {
-	border-bottom: 2px solid #c4c4c4;
-	background: black;
-}
+
 
 
 
