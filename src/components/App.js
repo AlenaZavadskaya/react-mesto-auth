@@ -6,7 +6,7 @@ import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/Api";
 import * as auth from "../utils/auth";
-import currentUserContext from "../contexts/CurrentUserContext";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
@@ -35,8 +35,7 @@ function App() {
 
   useEffect(() => {
     Promise.all([api.getUserData(), api.getInitialCards()])
-      .then((values) => {
-        const [userData, initialCards] = values;
+      .then(([userData, initialCards]) => {
         setCurrentUser({
           name: userData.name,
           about: userData.about,
@@ -51,11 +50,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      let jwt = localStorage.getItem("jwt");
-      if (!jwt) {
-        return console.log(`Токен не передан или передан не в том формате`);
-      }
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
       auth
         .getContent(jwt)
         .then((res) => {
@@ -65,16 +61,18 @@ function App() {
               email: res.data.email,
             });
             history.push("/");
+          } else {
+            localStorage.removeItem("jwt");
           }
         })
         .catch((err) => {
-          console.log(`Переданный токен некорректен: ${err}`);
+          console.log(`Переданный токен некорректен или просрочен: ${err}`);
         });
     }
-    if (loggedIn) {
-      history.push("/");
-    }
-  }, [history, loggedIn]);
+    // eslint-disable-next-line
+  }, []);
+
+
 
   function handleRegister(email, password) {
     setIsLoading(true);
@@ -263,7 +261,7 @@ function App() {
   }, []);
 
   return (
-    <currentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header onSignOut={handleSignOut} email={dataUser.email} />
       <Switch>
         <ProtectedRoute
@@ -295,8 +293,8 @@ function App() {
             isLoading={isLoading}
           />
         </Route>
-        <Footer />
-      </Switch>
+			</Switch>
+			{loggedIn && <Footer />}
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onUpdateUser={handleUpdateUser}
@@ -328,7 +326,7 @@ function App() {
         onSubmit={handleCardDelete}
       />
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-    </currentUserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 

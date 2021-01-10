@@ -1,8 +1,8 @@
 import React from "react";
-import currentUserContext from '../contexts/CurrentUserContext';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function Card(props) {
-	const currentUser = React.useContext(currentUserContext);
+	const currentUser = React.useContext(CurrentUserContext);
 
 	const isOwn = props.card.owner._id === currentUser._id;
 	const cardDeleteButtonClassName = (
@@ -29,7 +29,6 @@ function Card(props) {
     <li className="element" key={props.card._id}>
       <img
         className="element__image"
-        style={{ backgroundImage: `url(${props.link})` }}
         src={props.link}
         alt={props.name}
         card={props.card}
