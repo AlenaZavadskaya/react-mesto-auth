@@ -20,10 +20,10 @@ function InfoTooltip(props) {
             </h2>
           </>
         ) : (
-				<>
-				<div className="popup__img popup__img_fail" />
+          <>
+            <div className="popup__img popup__img_fail" />
             <h2 className="form__heading form__heading_infoTooltip">
-						Что-то пошло не так. Попробуйте ещё раз!
+              Что-то пошло не так. Попробуйте ещё раз!
             </h2>
           </>
         )}

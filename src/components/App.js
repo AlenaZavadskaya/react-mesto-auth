@@ -29,9 +29,9 @@ function App() {
   const [loggedIn, setloggedIn] = useState(false);
   const [dataUser, setDataUser] = useState({});
   const [message, setMessage] = useState("");
-	const [registerSuccess, setRegisterSuccess] = useState(false);
-	const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
-	const history = useHistory();
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     Promise.all([api.getUserData(), api.getInitialCards()])
@@ -74,8 +74,8 @@ function App() {
     if (loggedIn) {
       history.push("/");
     }
-	}, [history, loggedIn]);
-	
+  }, [history, loggedIn]);
+
   function handleRegister(email, password) {
     setIsLoading(true);
     auth
@@ -85,7 +85,7 @@ function App() {
           if (res.data) {
             setIsLoading(false);
             setMessage("");
-						handleRegisterSuccess(true);
+            handleRegisterSuccess(true);
             handleInfoTooltipPopup();
             history.push("/sign-in");
           }
@@ -93,7 +93,7 @@ function App() {
       })
       .catch((err) => {
         setMessage("Ошибка при регистрации");
-				handleRegisterSuccess(false);
+        handleRegisterSuccess(false);
         handleInfoTooltipPopup();
         if (err === 400) {
           return console.log(`Некорректно заполнено одно из полей : ${err}`);
@@ -103,7 +103,7 @@ function App() {
       });
   }
 
-	function handleRegisterSuccess(value) {
+  function handleRegisterSuccess(value) {
     setRegisterSuccess(value);
   }
 
@@ -131,7 +131,7 @@ function App() {
       })
       .catch((err) => {
         setMessage("Ошибка при авторизации.");
-				handleRegisterSuccess(false);
+        handleRegisterSuccess(false);
         handleInfoTooltipPopup();
         if (err === 401) {
           return console.log(`Пользователь с таким email не найден: ${err}`);
