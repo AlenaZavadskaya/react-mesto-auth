@@ -1,4 +1,8 @@
 export const BASE_URL = "https://auth.nomoreparties.co";
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
+};
 
 const getResponse = (res) => {
   if (res.ok) {
@@ -8,16 +12,12 @@ const getResponse = (res) => {
 };
 
 export const register = (email, password) => {
-	debugger
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
+    headers: headers,
     body: JSON.stringify({
-			password,
-			email
+      password,
+      email,
     }),
   }).then((res) => {
     return getResponse(res);
@@ -27,17 +27,14 @@ export const register = (email, password) => {
 export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
+    headers: headers,
     body: JSON.stringify({
       password,
-			email
+      email,
     }),
   })
     .then((res) => res.json())
-		.then((data) => {
+    .then((data) => {
       if (data.token) {
         localStorage.setItem("jwt", data.token);
         return data;
@@ -49,9 +46,8 @@ export const getContent = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
+      headers,
+      Authorization: `Bearer ${token}`,
     },
   }).then((res) => {
     return getResponse(res);
