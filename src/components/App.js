@@ -294,7 +294,7 @@ function App() {
           />
         </Route>
 			</Switch>
-			{loggedIn && <Footer />}
+			<Footer />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onUpdateUser={handleUpdateUser}
