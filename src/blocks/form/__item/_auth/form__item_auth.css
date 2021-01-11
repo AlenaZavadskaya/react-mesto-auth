@@ -3,3 +3,8 @@
 	background: black;
 	color: white;
 }
+
+.form__item_auth:focus {
+	background: black;
+	outline: none;
+}

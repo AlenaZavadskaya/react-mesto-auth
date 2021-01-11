@@ -13,10 +13,6 @@
   cursor: text;
 }
 
-.form__item:focus {
-	background: black;
-	outline: none;
-}
 
 
 
