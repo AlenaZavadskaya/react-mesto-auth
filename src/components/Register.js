@@ -53,7 +53,7 @@ function Register(props) {
           className="form__item form__item_auth"
           type="text"
           placeholder="Пароль"
-          minLength="2"
+          minLength="8"
           maxLength="200"
           value={password}
           onChange={handleChangePassword}
