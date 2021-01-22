@@ -14,7 +14,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "npm run build && scp -r ./build/* praktikum@130.193.38.40:/home/praktikum/frontend",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
