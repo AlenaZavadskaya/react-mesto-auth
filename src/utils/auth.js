@@ -1,4 +1,4 @@
-export const BASE_URL = "https://auth.nomoreparties.co";
+export const BASE_URL = "https://api.alenazavadskaya.students.nomoredomains.monster";
 const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
