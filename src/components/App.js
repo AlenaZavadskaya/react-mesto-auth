@@ -4,7 +4,7 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
-import api from "../utils/api";
+import Api from "../utils/api";
 import * as auth from "../utils/auth";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
@@ -33,7 +33,19 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const history = useHistory();
 
+  const api = new Api({
+    url: "https://api.alenazavadskaya.students.nomoredomains.monster/",
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
   useEffect(() => {
+    if (api._headers.authorization === "Bearer null") {
+      return;
+    }
     Promise.all([api.getUserData(), api.getInitialCards()])
       .then(([userData, initialCards]) => {
         setCurrentUser({
@@ -47,7 +59,8 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-  }, []);
+    // eslint-disable-next-line
+  }, [loggedIn]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -57,9 +70,7 @@ function App() {
         .then((res) => {
           if (res) {
             setloggedIn(true);
-            setDataUser({
-              email: res.data.email,
-            });
+            setDataUser(res);
             history.push("/");
           } else {
             localStorage.removeItem("jwt");
@@ -72,15 +83,13 @@ function App() {
     // eslint-disable-next-line
   }, []);
 
-
-
   function handleRegister(email, password) {
     setIsLoading(true);
     auth
       .register(email, password)
       .then((res) => {
         if (res) {
-          if (res.data) {
+          if (res) {
             setIsLoading(false);
             setMessage("");
             handleRegisterSuccess(true);
@@ -106,7 +115,6 @@ function App() {
   }
 
   function handleLogin(email, password) {
-    setIsLoading(true);
     auth
       .authorize(email, password)
       .then((data) => {
@@ -114,13 +122,12 @@ function App() {
           setMessage("Что-то пошло не так.");
           return false;
         }
-        if (data) {
-          setIsLoading(false);
+        if (data.token) {
           localStorage.setItem("jwt", data.token);
           setMessage("");
           setDataUser({
-            email: data.email,
-            password: data.password,
+            email: email,
+            password: password,
           });
           setloggedIn(true);
           history.push("/");
@@ -148,26 +155,11 @@ function App() {
   };
 
   function handleAddPlaceSubmit(card) {
-    setIsLoading(true);
     api
       .addCards(card)
       .then((newCard) => {
-        setIsLoading(false);
-        setCards([newCard, ...cards]);
+        setCards([newCard.card, ...cards]);
         closeAllPopups();
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
-  }
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card, !isLiked)
-      .then((newCard) => {
-        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-        setCards(newCards);
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -274,7 +266,6 @@ function App() {
           onAddPlace={handlePlacePopupOpen}
           onCardClick={setSelectedCard}
           name={currentUser.name}
-          onCardLike={handleCardLike}
           onCardDelete={handleCardDeleteRequest}
           cards={cards}
         ></ProtectedRoute>
@@ -293,8 +284,8 @@ function App() {
             isLoading={isLoading}
           />
         </Route>
-			</Switch>
-			<Footer />
+      </Switch>
+      <Footer />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onUpdateUser={handleUpdateUser}

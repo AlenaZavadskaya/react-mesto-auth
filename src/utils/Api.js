@@ -9,35 +9,24 @@ class Api {
   }
 
   getUserData() {
-    return fetch(`${this._url}${"users"}/${"me"}`, {
-      method: "GET",
-      headers: this._headers,
-    }).then(this._getResponse);
-  }
-
-  getInitialCards() {
-    return fetch(`${this._url}${"cards"}`, {
-      method: "GET",
-      headers: this._headers,
-    }).then(this._getResponse);
-  }
-
-  changeLikeCardStatus(data, isLiked) {
-    if (isLiked) {
-      return fetch(`${this._url}${"cards"}/${"likes"}/${data._id}`, {
-        method: "PUT",
-        headers: this._headers,
-        body: JSON.stringify(data),
-      }).then(this._getResponse);
-    } else {
-      return fetch(`${this._url}${"cards"}/${"likes"}/${data._id}`, {
-        method: "DELETE",
+    if (this._headers.authorization !== "Bearer null") {
+      return fetch(`${this._url}${"users"}/${"me"}`, {
+        method: "GET",
         headers: this._headers,
       }).then(this._getResponse);
     }
   }
 
-	deleteCard(data) {
+  getInitialCards() {
+    if (this._headers.authorization !== "Bearer null") {
+      return fetch(`${this._url}${"cards"}`, {
+        method: "GET",
+        headers: this._headers,
+      }).then(this._getResponse)
+    }
+  }
+
+  deleteCard(data) {
     return fetch(`${this._url}${"cards"}/${data._id}`, {
       method: "DELETE",
       headers: this._headers,
@@ -72,12 +61,4 @@ class Api {
   }
 }
 
-const api = new Api({
-  url: "https://api.alenazavadskaya.students.nomoredomains.monster/",
-  headers: {
-    authorization: "90f4c0de-1eee-42e7-8058-3892f79789d8",
-    "Content-Type": "application/json",
-  },
-});
-
-export default api;
+export default Api;

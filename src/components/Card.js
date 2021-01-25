@@ -1,32 +1,23 @@
 import React from "react";
-import CurrentUserContext from '../contexts/CurrentUserContext';
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
 function Card(props) {
-	const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
+  const isOwn = (props.card.owner._id || props.card.owner) === currentUser._id;
+  const cardDeleteButtonClassName = `element__delete ${
+    isOwn ? "element__delete-active" : ""
+  }`;
 
-	const isOwn = props.card.owner._id === currentUser._id;
-	const cardDeleteButtonClassName = (
-		`element__delete ${isOwn ? 'element__delete-active' : ''}`
-		);
-		
-	const isLiked = props.card.likes.some(i => i._id === currentUser._id);
-	const cardLikeButtonClassName = `element__like ${isLiked ? 'element__like_active' : ''}`;
-	
-
-	function handleCardClick() {
+  function handleCardClick() {
     props.onCardClick(props.card);
-	}
+  }
 
-	function handleLikeClick() {
-		props.onCardLike(props.card);
-	}
+  function handleDeleteClick() {
+    props.onCardDelete(props.card);
+  }
 
-	function handleDeleteClick() {
-		props.onCardDelete(props.card);
-	}
-	
   return (
-    <li className="element" key={props.card._id}>
+    <li className="element">
       <img
         className="element__image"
         src={props.link}
@@ -34,13 +25,14 @@ function Card(props) {
         card={props.card}
         onClick={handleCardClick}
       />
-      <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="reset" />
+      <button
+        className={cardDeleteButtonClassName}
+        onClick={handleDeleteClick}
+        type="reset"
+      />
       <div className="element__name">
         <h2 className="element__title">{props.name}</h2>
-        <div className="element__container">
-          <button className={cardLikeButtonClassName} onClick={handleLikeClick} key={props.id} type="button" />
-          <div className="element__counter">{props.likes.length}</div>
-        </div>
+        <div className="element__container"></div>
       </div>
     </li>
   );
